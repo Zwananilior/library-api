@@ -1,18 +1,4 @@
-import express from 'express';
-import { books } from '../models/book';
-import { validateBook } from '../middleware/validate';
 
-const router = express.Router();
-
-router.post('/', validateBook, (req, res) => {
-  if (books.find(b => b.title === req.body.title)) {
-    return res.status(409).json({ error: 'Book already exists' });
-  }
-  const id = books.length + 1;
-  const newBook = { id, title: req.body.title, year: req.body.year, authorId: req.body.authorId };
-  books.push(newBook);
-  res.status(201).json(newBook);
-});
 
 router.get('/', (req, res) => res.json(books));
 
