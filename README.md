@@ -1,172 +1,140 @@
-# Library API
+Library API
 
-## Project Overview
+A RESTful API for managing a library system with Authors and Books, built using Node.js and Express.
 
-The **Library API** is a RESTful API to manage a library system. It has two main resources:
+This project demonstrates CRUD operations, input validation, and centralized error handling.
 
-* **Authors**: Information about authors.
-* **Books**: Information about books, each belonging to an author.
+Features
 
-The API supports Create, Read, Update, Delete (CRUD) operations, validation, and proper error handling.
+Create, Read, Update, Delete Authors
 
----
+Create, Read, Update, Delete Books
 
-## API Endpoints
+List all books by a specific author (GET /books/author/:authorId)
 
-### Authors
+Input validation (rejects invalid or missing fields)
 
-**Get all authors**
-`GET /authors`
-No request body. Returns all authors.
+Centralized error handling (400, 404, 500)
 
-**Get author by ID**
-`GET /authors/:id`
-No request body. Returns a single author.
+Logging middleware (logs HTTP method + URL)
 
-**Create a new author**
-`POST /authors`
-Request body (JSON):
+📦 Project Structure
+library-api/
+│
+├─ src/
+│  ├─ index.js           # Entry point
+│  ├─ models/
+│  │  ├─ authors.js
+│  │  └─ books.js
+│  ├─routes/
+|  |  ├─author.ts
+|  |  └─books.ts
+│  ├─ middleware/
+│  │  ├─ logger.js
+│  │  ├─ validation.js
+│  │  └─ errorHandler.js
+│
+├─ package.json
+└─ README.md
 
-```json
+Installation
+
+Clone the repository:
+
+git clone <repository-url>
+cd library-api
+
+
+Install dependencies:
+
+npm install
+
+
+Start the development server:
+
+npm run dev
+
+
+
+Server will run at http://localhost:3000.
+
+📚 API Endpoints
+Authors
+Method	Endpoint	Description
+POST	/authors	Create a new author
+GET	/authors	List all authors
+GET	/authors/:id	Get author by ID
+PUT	/authors/:id	Update author by ID
+DELETE	/authors/:id	Delete author
+Request Example: Create Author
+
+POST /authors
+
 {
-  "name": "Author Name",
-  "bio": "Short biography of the author"
+  "title": "Name of the title",
+  "year": yyyy,
+  "authorId": 1
 }
-```
 
-Response example:
 
-```json
+Response Example:
+
 {
   "id": 1,
   "name": "Author Name",
-  "bio": "Short biography of the author"
+  "title": "Short biography of the author"
 }
-```
 
-**Update an existing author**
-`PUT /authors/:id`
-Request body (JSON):
+Books
+Method	Endpoint	Description
+POST	/books	Create a new book
+GET	/books	List all books
+GET	/books/:id	Get book by ID
+GET	/books/author/:authorId	List all books for a specific author
+PUT	/books/:id	Update book by ID
+DELETE	/books/:id	Delete book
+Request Example: Create Book
 
-```json
-{
-  "name": "Updated Author Name",
-  "bio": "Updated biography"
-}
-```
+POST /books
 
-Response example:
-
-```json
-{
-  "id": 1,
-  "name": "Updated Author Name",
-  "bio": "Updated biography"
-}
-```
-
-**Delete an author**
-`DELETE /authors/:id`
-No request body. Response example:
-
-```json
-{
-  "message": "Author deleted successfully"
-}
-```
-
-### Books
-
-**Get all books**
-`GET /books`
-No request body. Returns all books.
-
-**Get book by ID**
-`GET /books/:id`
-No request body. Returns a single book.
-
-**Get all books by a specific author**
-`GET /books/author/:authorId`
-No request body. Returns all books for a specific author.
-
-**Create a new book**
-`POST /books`
-Request body (JSON):
-
-```json
 {
   "title": "Book Title",
-  "genre": "Book Genre",
   "author_id": 1,
   "published_date": "YYYY-MM-DD"
 }
-```
 
-Response example:
 
-```json
+Response Example:
+
 {
   "id": 1,
   "title": "Book Title",
-  "genre": "Book Genre",
   "author_id": 1,
   "published_date": "YYYY-MM-DD"
 }
-```
 
-**Update an existing book**
-`PUT /books/:id`
-Request body (JSON):
+⚠️ Error Handling
 
-```json
-{
-  "title": "Updated Book Title",
-  "genre": "Updated Genre",
-  "author_id": 1,
-  "published_date": "YYYY-MM-DD"
-}
-```
+400 Bad Request – Missing or invalid fields
 
-Response example:
+404 Not Found – Resource does not exist
 
-```json
-{
-  "id": 1,
-  "title": "Updated Book Title",
-  "genre": "Updated Genre",
-  "author_id": 1,
-  "published_date": "YYYY-MM-DD"
-}
-```
+500 Internal Server Error – Unexpected server error
 
-**Delete a book**
-`DELETE /books/:id`
-No request body. Response example:
+Example Error Response:
 
-```json
-{
-  "message": "Book deleted successfully"
-}
-```
-
----
-
-## Validation and Error Handling
-
-* Required fields must be provided when creating or updating authors/books.
-* Invalid IDs return `404 Not Found`.
-* Errors return JSON with a message describing the problem.
-  Example error response:
-
-```json
 {
   "error": "Author not found"
 }
-```
 
----
+🛠️ Testing
 
-## Notes
+Use Postman or curl to test endpoints.
 
-* All endpoints return JSON responses.
-* Use **Postman** to send requests and test the API.
+Notes
+
+All endpoints return JSON responses.
+
+Logging middleware prints HTTP method + URL + timestamp in console.
+
+Works fully with Postman without creating a database manually.
